@@ -22,7 +22,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock() # set the frame rate to 60 frames per second
 dt = 0
 
-
+shots= pygame.sprite.Group()  
 asteroids = pygame.sprite.Group()
 updatable = pygame.sprite.Group()
 drawable = pygame.sprite.Group()
@@ -30,6 +30,7 @@ drawable = pygame.sprite.Group()
 AsteroidField.containers = (updatable)
 Player.containers = (updatable, drawable)
 Asteroid.containers = (asteroids, updatable, drawable)
+Shot.containers = (shots, updatable, drawable)
 
 
 player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -47,17 +48,14 @@ while True:
             print("Game Over!")
             pygame.quit()
             raise SystemExit 
-    for player in drawable:
-        player.draw(screen)
-    pygame.display.flip()
-    
-   
-   
-   
-   
-   
-   
-    # this creates a window with the specified width and height
+    for asteroid in asteroids:
+        for shot in shots:
+            if asteroid.collision(shot):
+                asteroid.split()
+                shot.kill()
+    for sprite in drawable:
+        sprite.draw(screen)
+    pygame.display.flip()# this creates a window with the specified width and height
     dt = clock.tick(60) / 1000.0
         
 
